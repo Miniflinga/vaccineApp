@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A152E19C2F09DC77000D0287 /* AddVaccineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A152E19B2F09DC77000D0287 /* AddVaccineView.swift */; };
+		A152E19E2F09E161000D0287 /* Color+PlatformBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A152E19D2F09E161000D0287 /* Color+PlatformBackground.swift */; };
+		A19053192F190FD00052AB64 /* Vaccine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19053182F190FC80052AB64 /* Vaccine.swift */; };
+		A190531B2F1917930052AB64 /* VaccineStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A190531A2F1917890052AB64 /* VaccineStorage.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		A152E18D2F09D367000D0287 /* vaccineApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vaccineApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A152E19B2F09DC77000D0287 /* AddVaccineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVaccineView.swift; sourceTree = "<group>"; };
+		A152E19D2F09E161000D0287 /* Color+PlatformBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+PlatformBackground.swift"; sourceTree = "<group>"; };
+		A19053182F190FC80052AB64 /* Vaccine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vaccine.swift; sourceTree = "<group>"; };
+		A190531A2F1917890052AB64 /* VaccineStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaccineStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,8 +43,12 @@
 		A152E1842F09D367000D0287 = {
 			isa = PBXGroup;
 			children = (
+				A152E19B2F09DC77000D0287 /* AddVaccineView.swift */,
+				A19053182F190FC80052AB64 /* Vaccine.swift */,
+				A190531A2F1917890052AB64 /* VaccineStorage.swift */,
 				A152E18F2F09D367000D0287 /* vaccineApp */,
 				A152E18E2F09D367000D0287 /* Products */,
+				A152E19D2F09E161000D0287 /* Color+PlatformBackground.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -119,6 +134,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A152E19E2F09E161000D0287 /* Color+PlatformBackground.swift in Sources */,
+				A19053192F190FD00052AB64 /* Vaccine.swift in Sources */,
+				A152E19C2F09DC77000D0287 /* AddVaccineView.swift in Sources */,
+				A190531B2F1917930052AB64 /* VaccineStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,13 +289,14 @@
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				XROS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = Debug;
@@ -312,13 +332,14 @@
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				XROS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = Release;
