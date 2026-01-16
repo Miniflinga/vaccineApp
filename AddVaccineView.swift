@@ -73,6 +73,7 @@ struct AddVaccineView: View {
                                     date: vaccinationDate
                             )
                             onSave(vaccine)
+                            NotificationManager.shared.scheduleReminder(for: vaccine)
                             dismiss()
                         }
                         .disabled(!isFormValid) // Disable:ar om formatet ej är giltigt

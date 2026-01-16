@@ -28,6 +28,8 @@ struct ContentView: View {
                             AddVaccineView(existingVaccine: vaccine) { updatedVaccine in
                                 if let index = vaccines.firstIndex(where: { $0.id == updatedVaccine.id }) {
                                     vaccines[index] = updatedVaccine
+                                    NotificationManager.shared.removeReminder(for: updatedVaccine)
+                                    NotificationManager.shared.scheduleReminder(for: updatedVaccine)
                                     storage.save(vaccines)
                                 }
                             }
@@ -47,8 +49,17 @@ struct ContentView: View {
                                     Text(vaccine.date.formatted(date: .abbreviated, time: .omitted))
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
-                                }
+                                    
+                                    HStack(spacing: 6) {
+                                        Image(systemName: vaccine.statusIcon)
+                                            .foregroundColor(vaccine.statusColor)
 
+                                        Text(vaccine.statusText)
+                                    }
+                                    .font(.caption)
+                                    .foregroundColor(vaccine.statusColor)
+                                }
+                                
                                 Spacer()
                             }
                             .padding()
@@ -84,6 +95,10 @@ struct ContentView: View {
         }
     }
     private func deleteVaccine(at offsets: IndexSet) {
+        for index in offsets {
+            let vaccine = vaccines[index]
+            NotificationManager.shared.removeReminder(for: vaccine)
+        }
         vaccines.remove(atOffsets: offsets)
         storage.save(vaccines)
     }

@@ -11,6 +11,7 @@
 		A152E19E2F09E161000D0287 /* Color+PlatformBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A152E19D2F09E161000D0287 /* Color+PlatformBackground.swift */; };
 		A19053192F190FD00052AB64 /* Vaccine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19053182F190FC80052AB64 /* Vaccine.swift */; };
 		A190531B2F1917930052AB64 /* VaccineStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A190531A2F1917890052AB64 /* VaccineStorage.swift */; };
+		A190531D2F1A3E0F0052AB64 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A190531C2F1A3E040052AB64 /* NotificationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		A152E19D2F09E161000D0287 /* Color+PlatformBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+PlatformBackground.swift"; sourceTree = "<group>"; };
 		A19053182F190FC80052AB64 /* Vaccine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vaccine.swift; sourceTree = "<group>"; };
 		A190531A2F1917890052AB64 /* VaccineStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaccineStorage.swift; sourceTree = "<group>"; };
+		A190531C2F1A3E040052AB64 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -45,6 +47,7 @@
 			children = (
 				A152E19B2F09DC77000D0287 /* AddVaccineView.swift */,
 				A19053182F190FC80052AB64 /* Vaccine.swift */,
+				A190531C2F1A3E040052AB64 /* NotificationManager.swift */,
 				A190531A2F1917890052AB64 /* VaccineStorage.swift */,
 				A152E18F2F09D367000D0287 /* vaccineApp */,
 				A152E18E2F09D367000D0287 /* Products */,
@@ -136,6 +139,7 @@
 			files = (
 				A152E19E2F09E161000D0287 /* Color+PlatformBackground.swift in Sources */,
 				A19053192F190FD00052AB64 /* Vaccine.swift in Sources */,
+				A190531D2F1A3E0F0052AB64 /* NotificationManager.swift in Sources */,
 				A152E19C2F09DC77000D0287 /* AddVaccineView.swift in Sources */,
 				A190531B2F1917930052AB64 /* VaccineStorage.swift in Sources */,
 			);
