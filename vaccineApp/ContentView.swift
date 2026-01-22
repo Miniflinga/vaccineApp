@@ -43,28 +43,62 @@ struct ContentView: View {
                                     .cornerRadius(10)
 
                                 VStack(alignment: .leading, spacing: 4) {
+                                    // Namn
                                     Text(vaccine.name)
                                         .font(.headline)
 
+                                    // Datum
                                     Text(vaccine.date.formatted(date: .abbreviated, time: .omitted))
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                     
+                                    // Status
                                     HStack(spacing: 6) {
                                         Image(systemName: vaccine.statusIcon)
                                             .foregroundColor(vaccine.statusColor)
 
                                         Text(vaccine.statusText)
+
                                     }
                                     .font(.caption)
                                     .foregroundColor(vaccine.statusColor)
+                                    
+                                    // Förnyelse - dagar kvar / försenad dagar
+                                    if let days = vaccine.daysUntilRenewal,
+                                       let renewalDate = vaccine.renewalDate {
+
+                                        if days <= 30 && days >= 0 {
+                                           Text("\(days) dagar kvar")
+                                               .font(.caption2)
+                                               .foregroundColor(.secondary)
+                                        } else if days < 0 {
+                                           Text("Gick ut \(renewalDate.formatted(date: .abbreviated, time: .omitted))")
+                                               .font(.caption2)
+                                               .foregroundColor(.red)
+                                        }
+                                    }
                                 }
-                                
+    
                                 Spacer()
                             }
                             .padding()
                             .background(Color.secondarySystemBackground)
                             .cornerRadius(16)
+                            .overlay(alignment: .topTrailing) { // Badge baserad på förnyelse
+                                if vaccine.attentionLevel != .none {
+                                    
+                                    let badgeColor: Color = vaccine.attentionLevel == .overdue ? .red : .orange
+                                    
+                                    Circle()
+                                        .fill(badgeColor.opacity(0.85))
+                                        .frame(width: 10, height: 10)
+                                        .background(
+                                            Circle()
+                                                .fill(.ultraThinMaterial)
+                                        )
+                                        .padding(8)
+                                }
+                            }
                         }
                     }
                     .onDelete(perform: deleteVaccine)

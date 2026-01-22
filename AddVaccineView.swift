@@ -11,18 +11,26 @@ import AudioToolbox
 
 struct AddVaccineView: View {
     
-    var existingVaccine: Vaccine?
-    var onSave: (Vaccine) -> Void
+    // Environment
+    @Environment(\.dismiss) private var dismiss
     
     // Input
     @State private var vaccineName: String
     @State private var vaccinationDate: Date
     
+    // Förnyelse
+    @State private var shouldRenew: Bool
+    @State private var renewalYears: Int
+    @State private var renewalMonths: Int
+    
     // Validering
     @State private var didAttemptSave = false
     @State private var shakeDate = false
     
-    @Environment(\.dismiss) private var dismiss
+    // Justering
+    var existingVaccine: Vaccine?
+    var onSave: (Vaccine) -> Void
+    
     
     // Init
     init(existingVaccine: Vaccine? = nil,
@@ -33,12 +41,42 @@ struct AddVaccineView: View {
 
         _vaccineName = State(initialValue: existingVaccine?.name ?? "")
         _vaccinationDate = State(initialValue: existingVaccine?.date ?? Date())
+        
+        _shouldRenew = State(initialValue: existingVaccine?.renewalDate != nil)
+        
+        // Förnyelse - Sparar användarens val vid redigering
+        if let renewalDate = existingVaccine?.renewalDate {
+            let components = Calendar.current.dateComponents(
+                [.year, .month],
+                from: existingVaccine!.date,
+                to: renewalDate
+            )
+            _renewalYears = State(initialValue: components.year ?? 0)
+            _renewalMonths = State(initialValue: components.month ?? 0)
+        } else {
+            _renewalYears = State(initialValue: 0)
+            _renewalMonths = State(initialValue: 0)
+        }
     }
 
     // Validering
     private var isDateValid: Bool { vaccinationDate <= Date() } // Datum
-    private var isNameValid: Bool { !vaccineName.trimmingCharacters(in: .whitespaces).isEmpty } //Namn
-    private var isFormValid: Bool { isNameValid && isDateValid }    // Formulär
+    private var isNameValid: Bool { !vaccineName.trimmingCharacters(in: .whitespaces).isEmpty } // Namn
+    private var isRenewalValid: Bool { !shouldRenew || (renewalYears > 0 || renewalMonths > 0) }    // Förnyelsedatum
+    private var isFormValid: Bool { isNameValid && isDateValid && isRenewalValid }    // Formulär
+    
+    // Förnyelsedatum
+    private var renewalDate: Date? {
+        guard shouldRenew else { return nil }
+
+        return Calendar.current.date(
+            byAdding: DateComponents(
+                year: renewalYears,
+                month: renewalMonths
+            ),
+            to: vaccinationDate
+        )
+    }
     
     // Haptik och ljud
     private func errorFeedback() {
@@ -73,7 +111,7 @@ struct AddVaccineView: View {
                                 .disableAutocorrection(false)
                         }
                         
-                        // Output vid namn-error
+                        // Valideringsfel
                         if didAttemptSave && !isNameValid {
                             Text("Vaccinets namn kan inte vara tomt")
                                 .font(.caption)
@@ -86,6 +124,7 @@ struct AddVaccineView: View {
                         DatePicker(
                             "Vaccinationsdatum",
                             selection: $vaccinationDate,
+                            in: ...Date(),
                             displayedComponents: .date
                         )
                         
@@ -99,11 +138,30 @@ struct AddVaccineView: View {
                             value: shakeDate
                         )
                         
-                        // Output vid datum-error
+                        // Valideringsfel
                         if didAttemptSave && !isDateValid {
                             Text("Datumet kan inte vara i framtiden")
                                 .font(.caption)
                                 .foregroundColor(.red)
+                        }
+                    }
+            
+                    // Förnyelse
+                    Section(header: Text("Förnyelse")) {
+                        Toggle("Ska vaccinet förnyas?", isOn: $shouldRenew)
+                        
+                        if shouldRenew {
+                            VStack {
+                                Stepper("År: \(renewalYears)", value: $renewalYears, in: 0...120)
+                                Stepper("Månader: \(renewalMonths)", value: $renewalMonths, in: 0...11)
+                            }
+                            
+                            // Valideringsfel
+                            if didAttemptSave && !isRenewalValid {
+                                Text("Välj minst 1 månad för förnyelse")
+                                    .font(.caption)
+                                    .foregroundColor(.red)
+                            }
                         }
                     }
 
@@ -132,7 +190,8 @@ struct AddVaccineView: View {
                             let vaccine = Vaccine(
                                     id: existingVaccine?.id ?? UUID(),
                                     name: vaccineName,
-                                    date: vaccinationDate
+                                    date: vaccinationDate,
+                                    renewalDate: renewalDate
                             )
                             
                             onSave(vaccine)
@@ -145,7 +204,7 @@ struct AddVaccineView: View {
                         //.disabled(!isFormValid) - Disable:ar om formatet ej är giltigt
                     }
                 }
-                .navigationTitle("Nytt vaccin")
+                .navigationTitle(existingVaccine == nil ? "Nytt vaccin" : "Redigera vaccin")
             }
         }
     }

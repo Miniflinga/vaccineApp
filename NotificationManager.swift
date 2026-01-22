@@ -13,7 +13,14 @@ class NotificationManager {
     static let shared = NotificationManager()
 
     func scheduleReminder(for vaccine: Vaccine) {
+        
+        // Ingen förnyelse → ingen notis
+        guard let renewalDate = vaccine.renewalDate else {
+            removeReminder(for: vaccine)
+            return
+        }
 
+        // Notis på förnyelsedagen
         let content = UNMutableNotificationContent()
         content.title = "Vaccinpåminnelse 💉"
         content.body = "\(vaccine.name) behöver förnyas"
@@ -21,7 +28,7 @@ class NotificationManager {
 
         let triggerDate = Calendar.current.dateComponents(
             [.year, .month, .day],
-            from: vaccine.renewalDate
+            from: renewalDate
         )
 
         let trigger = UNCalendarNotificationTrigger(

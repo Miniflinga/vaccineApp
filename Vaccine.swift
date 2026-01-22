@@ -12,8 +12,9 @@ struct Vaccine: Identifiable, Codable {
     let id: UUID
     let name: String
     let date: Date
+    var renewalDate: Date?
     
-    // Dynamisk ikon per vaccin
+    // Dynamisk ikon per vaccinnamn
     var iconName: String {
         switch name.lowercased() {
         case let n where n.contains("covid"):
@@ -27,18 +28,7 @@ struct Vaccine: Identifiable, Codable {
         }
     }
     
-    // Dynamisk statusikon beroende på utgångsstatus
-    var statusIcon: String {
-        if isExpired {
-            return "exclamationmark.triangle.fill"
-        } else if daysUntilRenewal <= 30 {
-            return "clock.fill"
-        } else {
-            return "checkmark.circle.fill"
-        }
-    }
-    
-    // Dynamisk färg per vaccin
+    // Dynamisk färg per vaccinnamn
     var color: Color {
         switch name.lowercased() {
         case let n where n.contains("covid"):
@@ -52,44 +42,83 @@ struct Vaccine: Identifiable, Codable {
         }
     }
     
+    // Avgör om utgången
+    var isExpired: Bool {
+        guard let renewalDate else { return false }
+        return renewalDate < Date()
+    }
+
+    // Avgör dagar till utgången (nil → ingen förnyelse)
+    var daysUntilRenewal: Int? {
+        guard let renewalDate else { return nil }
+        return Calendar.current.dateComponents(
+            [.day],
+            from: Date(),
+            to: renewalDate
+        ).day
+    }
+
+    // Meddelande för utgångsstatus
+    var statusText: String {
+        guard let days = daysUntilRenewal else {
+            return "Giltig"
+        }
+        
+        if days < 0 {
+            return "Förnyelse försenad"
+        } else if days <= 30 {
+            return "Förnyas snart"
+        } else {
+            return "Giltig"
+        }
+    }
+    
+    // Dynamisk statusikon beroende på utgångsstatus
+    var statusIcon: String {
+        guard let days = daysUntilRenewal else {
+            return "checkmark.circle.fill"
+        }
+
+        if days < 0 {
+            return "exclamationmark.triangle.fill"
+        } else if days <= 30 {
+            return "clock.fill"
+        } else {
+            return "checkmark.circle.fill"
+        }
+    }
+
     // Dynamisk statusfärg beroende på utgångsstatus
     var statusColor: Color {
-        if isExpired {
+        guard let days = daysUntilRenewal else {
+            return .green
+        }
+        
+        if days < 0 {
             return .red
-        } else if daysUntilRenewal <= 30 {
+        } else if days <= 30 {
             return .orange
         } else {
             return .green
         }
     }
     
-    // Förnyelse datum till ett år från dagens datum
-    var renewalDate: Date {
-        Calendar.current.date(byAdding: .year, value: 1, to: date) ?? date
-    }
-    
-    // Avgör om utgången
-    var isExpired: Bool {
-        renewalDate < Date()
+    // Dynamisk badge beroende på förnyelsedatum
+    enum AttentionLevel {
+        case none
+        case warning   // snart (≤ 30 dagar)
+        case overdue   // försenad
     }
 
-    // Avgör dagar till utgången
-    var daysUntilRenewal: Int {
-        Calendar.current.dateComponents(
-            [.day],
-            from: Date(),
-            to: renewalDate
-        ).day ?? 0
-    }
+    var attentionLevel: AttentionLevel {
+        guard let days = daysUntilRenewal else { return .none }
 
-    // Meddelande för utgångsstatus
-    var statusText: String {
-        if isExpired {
-            return "Förnyelse försenad"
-        } else if daysUntilRenewal <= 30 {
-            return "Förnyas snart"
+        if days < 0 {
+            return .overdue
+        } else if days <= 30 {
+            return .warning
         } else {
-            return "Giltig"
+            return .none
         }
     }
 
