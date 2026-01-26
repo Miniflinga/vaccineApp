@@ -22,6 +22,7 @@ struct AddVaccineView: View {
     @State private var shouldRenew: Bool
     @State private var renewalYears: Int
     @State private var renewalMonths: Int
+    @State private var showRenewalPicker = false
     
     // Validering
     @State private var didAttemptSave = false
@@ -90,6 +91,23 @@ struct AddVaccineView: View {
         generator.notificationOccurred(.success)
         AudioServicesPlaySystemSound(1057) // System "success"
     }
+    
+    // Förnyelse - summeringstext
+    private var renewalSummaryText: String {
+        // Ingen förnyelse eller inget valt intervall
+        guard shouldRenew else { return "" }
+
+        switch (renewalYears, renewalMonths) {
+        case (0, 0):
+                return ""
+        case (0, let months):
+            return "\(months) månad\(months > 1 ? "er" : "")"
+        case (let years, 0):
+            return "\(years) år"
+        default:
+            return "\(renewalYears) år och \(renewalMonths) månader"
+        }
+    }
 
     
     var body: some View {
@@ -149,19 +167,38 @@ struct AddVaccineView: View {
                     // Förnyelse
                     Section(header: Text("Förnyelse")) {
                         Toggle("Ska vaccinet förnyas?", isOn: $shouldRenew)
-                        
+                            .onChange(of: shouldRenew) {
+                                if shouldRenew {
+                                    DispatchQueue.main.async {
+                                                showRenewalPicker = true
+                                            }
+                                } else {
+                                    showRenewalPicker = false
+                                    renewalYears = 0
+                                    renewalMonths = 0
+                                }
+                            }
                         if shouldRenew {
-                            VStack {
-                                Stepper("År: \(renewalYears)", value: $renewalYears, in: 0...120)
-                                Stepper("Månader: \(renewalMonths)", value: $renewalMonths, in: 0...11)
+                            Button {
+                                showRenewalPicker = true
+                            } label: {
+                                HStack {
+                                    Text("Intervall")
+                                        .foregroundColor(.primary)
+                                    
+                                    Spacer()
+                                    
+                                    Text(renewalSummaryText.isEmpty ? "Välj intervall" : renewalSummaryText)
+                                        .foregroundColor(.accentColor)
+                                }
                             }
-                            
-                            // Valideringsfel
-                            if didAttemptSave && !isRenewalValid {
-                                Text("Välj minst 1 månad för förnyelse")
-                                    .font(.caption)
-                                    .foregroundColor(.red)
-                            }
+                        }
+                        
+                        // Valideringsfel
+                        if didAttemptSave && !isRenewalValid {
+                            Text("Intervallet kan inte vara tomt")
+                                .font(.caption)
+                                .foregroundColor(.red)
                         }
                     }
 
@@ -201,10 +238,76 @@ struct AddVaccineView: View {
                             
                             dismiss()
                         }
-                        //.disabled(!isFormValid) - Disable:ar om formatet ej är giltigt
                     }
                 }
                 .navigationTitle(existingVaccine == nil ? "Nytt vaccin" : "Redigera vaccin")
+            
+                // Förnyelse-pop-up
+                .sheet(isPresented: $showRenewalPicker) {
+                    NavigationStack {
+                        Form {
+                            Section {
+                                
+                                // Wheel-pickers
+                                HStack(spacing: 12) {
+                                    
+                                    // År
+                                    VStack(spacing: 4) {
+                                        Text("År")
+                                            .foregroundColor(.secondary)
+                                        
+                                        Picker("År", selection: $renewalYears) {
+                                            ForEach(0...50, id: \.self) { year in
+                                                Text("\(year)").tag(year)
+                                            }
+                                        }
+                                    }
+                                    
+                                    // Månader
+                                    VStack(spacing: 4) {
+                                        Text("Månader")
+                                            .foregroundColor(.secondary)
+                                        
+                                        Picker("Månader", selection: $renewalMonths) {
+                                            ForEach(0...11, id: \.self) { month in
+                                                Text("\(month)").tag(month)
+                                            }
+                                        }
+                                    }
+                                }
+                                .pickerStyle(.wheel)
+                                .frame(height: 170)
+                                .clipped()
+                                .listRowSeparator(.hidden)
+                                
+                                // Summeringstext
+                                if isRenewalValid {
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        
+                                        // Rad 1: Intervall
+                                        Text("Förnyas om \(renewalSummaryText)")
+                                            .foregroundColor(.secondary)
+                                        
+                                        // Rad 2: Månad och år
+                                        if let date = renewalDate {
+                                            Text(
+                                                date.formatted(
+                                                    .dateTime
+                                                        .month(.wide)
+                                                        .year()
+                                                )
+                                            )
+                                            .foregroundColor(.secondary.opacity(0.8))
+                                        }
+                                    }
+                                    .font(.footnote)
+                                }
+                            }
+                        }
+                        .navigationTitle("Förnyelseintervall")
+                    }
+                    .presentationDetents([.medium])
+                }
             }
         }
     }
@@ -213,7 +316,7 @@ struct AddVaccineView: View {
     AddVaccineView(
         existingVaccine: Vaccine(
             id: UUID(),
-            name: String(), // Eller "Exempelnamn på vaccin"
+            name: String(),
             date: Date()
         )
     ) { _ in }
