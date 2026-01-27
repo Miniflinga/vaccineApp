@@ -73,6 +73,17 @@ struct Vaccine: Identifiable, Codable {
         }
     }
     
+    // Dynamisk information för månad och år till förnyelse
+    var renewalMonthYearText: String? {
+        guard let renewalDate else { return nil }
+
+        return renewalDate.formatted(
+            .dateTime
+                .month(.wide)
+                .year()
+        )
+    }
+    
     // Dynamisk statusikon beroende på utgångsstatus
     var statusIcon: String {
         guard let days = daysUntilRenewal else {

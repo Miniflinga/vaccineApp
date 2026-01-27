@@ -39,7 +39,7 @@ struct ContentView: View {
                                     .font(.title2)
                                     .foregroundColor(.white)
                                     .frame(width: 44, height: 44)
-                                    .background(vaccine.color)  // Bytt från .background(Color(.systemBlue))
+                                    .background(vaccine.color)
                                     .cornerRadius(10)
 
                                 VStack(alignment: .leading, spacing: 4) {
@@ -65,14 +65,18 @@ struct ContentView: View {
                                     
                                     // Förnyelse - dagar kvar / försenad dagar
                                     if let days = vaccine.daysUntilRenewal,
-                                       let renewalDate = vaccine.renewalDate {
+                                       let monthYear = vaccine.renewalMonthYearText {
 
-                                        if days <= 30 && days >= 0 {
+                                        if days > 30 {
+                                            Text("Går ut \(monthYear)")
+                                                .font(.caption2)
+                                                .foregroundColor(.secondary)
+                                        }; if days <= 30 && days >= 0 {
                                            Text("\(days) dagar kvar")
                                                .font(.caption2)
                                                .foregroundColor(.secondary)
                                         } else if days < 0 {
-                                           Text("Gick ut \(renewalDate.formatted(date: .abbreviated, time: .omitted))")
+                                           Text("Gick ut \(monthYear)")
                                                .font(.caption2)
                                                .foregroundColor(.red)
                                         }
