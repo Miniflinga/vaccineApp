@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A126E9E02F2D187400A4D436 /* VaccineFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A126E9DF2F2D187400A4D436 /* VaccineFormView.swift */; };
+		A126E9E62F2D19BB00A4D436 /* DetailVaccineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A126E9E52F2D19BB00A4D436 /* DetailVaccineView.swift */; };
 		A152E19C2F09DC77000D0287 /* AddVaccineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A152E19B2F09DC77000D0287 /* AddVaccineView.swift */; };
 		A152E19E2F09E161000D0287 /* Color+PlatformBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A152E19D2F09E161000D0287 /* Color+PlatformBackground.swift */; };
 		A19053192F190FD00052AB64 /* Vaccine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19053182F190FC80052AB64 /* Vaccine.swift */; };
@@ -15,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A126E9DF2F2D187400A4D436 /* VaccineFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaccineFormView.swift; sourceTree = "<group>"; };
+		A126E9E52F2D19BB00A4D436 /* DetailVaccineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailVaccineView.swift; sourceTree = "<group>"; };
 		A152E18D2F09D367000D0287 /* vaccineApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vaccineApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A152E19B2F09DC77000D0287 /* AddVaccineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVaccineView.swift; sourceTree = "<group>"; };
 		A152E19D2F09E161000D0287 /* Color+PlatformBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+PlatformBackground.swift"; sourceTree = "<group>"; };
@@ -45,7 +49,9 @@
 		A152E1842F09D367000D0287 = {
 			isa = PBXGroup;
 			children = (
+				A126E9DF2F2D187400A4D436 /* VaccineFormView.swift */,
 				A152E19B2F09DC77000D0287 /* AddVaccineView.swift */,
+				A126E9E52F2D19BB00A4D436 /* DetailVaccineView.swift */,
 				A19053182F190FC80052AB64 /* Vaccine.swift */,
 				A190531C2F1A3E040052AB64 /* NotificationManager.swift */,
 				A190531A2F1917890052AB64 /* VaccineStorage.swift */,
@@ -138,7 +144,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A152E19E2F09E161000D0287 /* Color+PlatformBackground.swift in Sources */,
+				A126E9E02F2D187400A4D436 /* VaccineFormView.swift in Sources */,
 				A19053192F190FD00052AB64 /* Vaccine.swift in Sources */,
+				A126E9E62F2D19BB00A4D436 /* DetailVaccineView.swift in Sources */,
 				A190531D2F1A3E0F0052AB64 /* NotificationManager.swift in Sources */,
 				A152E19C2F09DC77000D0287 /* AddVaccineView.swift in Sources */,
 				A190531B2F1917930052AB64 /* VaccineStorage.swift in Sources */,
